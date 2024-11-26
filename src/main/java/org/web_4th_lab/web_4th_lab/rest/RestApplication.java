@@ -2,6 +2,8 @@ package org.web_4th_lab.web_4th_lab.rest;
 
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.ApplicationPath;
+import org.web_4th_lab.web_4th_lab.resources.AuthorizationController;
+
 import java.util.HashSet;
 import java.util.Set;
 

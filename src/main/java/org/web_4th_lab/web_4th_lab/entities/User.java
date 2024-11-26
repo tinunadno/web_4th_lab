@@ -13,6 +13,8 @@ public class User implements Serializable {
     private String username;
     @Column(name = "password", nullable = false)
     private String password;
+    @Column(name = "token", nullable = false)
+    private String token;
 
     public User() {}
     public User(int id, String username, String password) {
@@ -40,5 +42,12 @@ public class User implements Serializable {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+    public String getToken() {
+        return token;
     }
 }

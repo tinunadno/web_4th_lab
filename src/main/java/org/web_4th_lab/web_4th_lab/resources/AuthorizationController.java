@@ -1,4 +1,4 @@
-package org.web_4th_lab.web_4th_lab.rest;
+package org.web_4th_lab.web_4th_lab.resources;
 
 
 import jakarta.ejb.EJB;
@@ -9,7 +9,6 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.web_4th_lab.web_4th_lab.Beans.UserService;
-import org.web_4th_lab.web_4th_lab.entities.User;
 
 @Path("/authorization")
 public class AuthorizationController {

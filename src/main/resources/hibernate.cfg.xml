@@ -29,5 +29,6 @@
 
         <!-- Specify annotated class -->
         <mapping class="org.web_4th_lab.web_4th_lab.entities.User"/>
+        <mapping class="org.web_4th_lab.web_4th_lab.entities.Result"/>
     </session-factory>
 </hibernate-configuration>
