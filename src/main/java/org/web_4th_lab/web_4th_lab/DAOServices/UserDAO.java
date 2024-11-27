@@ -88,13 +88,12 @@ public class UserDAO {
             try {
                 transaction = session.beginTransaction();
 
-                // Создаем запрос для удаления всех результатов с нужным user_id
                 Query query = session.createQuery("DELETE FROM User u WHERE u.id = :userId");
                 query.setParameter("userId", userId);
 
-                int deletedCount = query.executeUpdate(); // Выполняем запрос
+                int deletedCount = query.executeUpdate();
 
-                transaction.commit(); // Подтверждаем изменения
+                transaction.commit();
                 System.out.println("Deleted " + deletedCount + " results for user ID: " + userId);
             } catch (Exception e) {
                 if (transaction != null && transaction.getStatus().canRollback()) {

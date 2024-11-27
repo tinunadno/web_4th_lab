@@ -30,7 +30,6 @@ public class ResultDao {
     public List<Result> getResultsByUserId(int userId) {
         List<Result> results = new ArrayList<>();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            // Создаем запрос для получения всех результатов с нужным user_id
             Query<Result> query = session.createQuery("FROM Result r WHERE r.user.id = :userId", Result.class);
             query.setParameter("userId", userId);
             results = query.getResultList();
@@ -45,14 +44,12 @@ public class ResultDao {
             Transaction transaction = null;
             try {
                 transaction = session.beginTransaction();
-
-                // Создаем запрос для удаления всех результатов с нужным user_id
                 Query query = session.createQuery("DELETE FROM Result r WHERE r.user.id = :userId");
                 query.setParameter("userId", userId);
 
-                int deletedCount = query.executeUpdate(); // Выполняем запрос
+                int deletedCount = query.executeUpdate();
 
-                transaction.commit(); // Подтверждаем изменения
+                transaction.commit();
                 System.out.println("Deleted " + deletedCount + " results for user ID: " + userId);
             } catch (Exception e) {
                 if (transaction != null && transaction.getStatus().canRollback()) {
