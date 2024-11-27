@@ -2,6 +2,7 @@ package org.web_4th_lab.web_4th_lab.Beans;
 
 import jakarta.ejb.Stateless;
 import org.web_4th_lab.web_4th_lab.DAOServices.UserDAO;
+import org.web_4th_lab.web_4th_lab.Utils.BackendLogger;
 import org.web_4th_lab.web_4th_lab.Utils.TokenGenerator;
 import org.web_4th_lab.web_4th_lab.entities.User;
 
@@ -34,7 +35,7 @@ public class UserService {
         int id = userDAO.getUserID(username);
         String token = tokenGenerator.getNewToken();
         userDAO.saveToken(id, token);
-        return "Authorized:"+id+"%"+tokenGenerator.getNewToken();
+        return "Authorized:"+id+"%"+token;
     }
 
     public boolean validateAuthorizedUser(String id, String token){

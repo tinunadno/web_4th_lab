@@ -3,6 +3,7 @@ package org.web_4th_lab.web_4th_lab.Beans;
 import jakarta.ejb.Stateless;
 import org.web_4th_lab.web_4th_lab.DAOServices.ResultDao;
 import org.web_4th_lab.web_4th_lab.DAOServices.UserDAO;
+import org.web_4th_lab.web_4th_lab.Utils.BackendLogger;
 import org.web_4th_lab.web_4th_lab.Utils.DateFormer;
 import org.web_4th_lab.web_4th_lab.entities.Result;
 
@@ -60,7 +61,7 @@ public class PointService {
 
     private boolean pointBelongs(double x, double y, double r) {
         boolean firstFig=(y<=0 && y>=-r) && (x<=0 && x>=-r/2);
-        boolean secondFig=((x*x+y*y)<=(r*r/4)) && (x<=0);
+        boolean secondFig=((x*x+y*y)<=(r*r/4)) && (x>=0) && (y>=0);
         boolean thirdFig=(y>=((x-r/2)*2)) && (x>=0) && (y<=0);
         return (firstFig || secondFig ||thirdFig);
     }

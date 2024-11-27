@@ -3,6 +3,7 @@ package org.web_4th_lab.web_4th_lab.DAOServices;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.web_4th_lab.web_4th_lab.Utils.BackendLogger;
 import org.web_4th_lab.web_4th_lab.entities.User;
 
 public class UserDAO {
@@ -47,6 +48,7 @@ public class UserDAO {
     public boolean validateAuthorizedUser(int id, String token) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             User user = session.get(User.class, id);
+            System.out.println(user);
             if (user != null) {
                 return user.getToken().equals(token);
             }else{
