@@ -34,4 +34,29 @@ public class PointCheckingController {
         String result = pointService.getUserHistory(id);
         return Response.ok(result).build();
     }
+
+    @GET
+    @Path("getPoints")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPoints(@QueryParam("id") String id,
+                              @QueryParam("token") String token) {
+        if(!userService.validateAuthorizedUser(id, token)){
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+        String result = pointService.getUserHistory(id);
+        return Response.ok(result).build();
+    }
+
+    @GET
+    @Path("clearPointsHistory")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response clearPointsHistory(@QueryParam("id") String id,
+                              @QueryParam("token") String token) {
+        if(!userService.validateAuthorizedUser(id, token)){
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+        pointService.clearPointHistory(id);
+        String result = pointService.getUserHistory(id);
+        return Response.ok(result).build();
+    }
 }

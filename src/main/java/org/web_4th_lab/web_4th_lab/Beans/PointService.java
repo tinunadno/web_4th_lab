@@ -16,6 +16,15 @@ public class PointService {
     ResultDao resultDao = new ResultDao();
     private final DateFormer dateFormer= new DateFormer();
 
+    public void clearPointHistory(String userID){
+        int id =0;
+        try{
+            id = Integer.parseInt(userID);
+        }catch (NumberFormatException e){
+            e.printStackTrace();
+        }
+        resultDao.deleteResultsByUserId(id);
+    }
 
     public void checkPoint(String x_cord, String y_cord, String radius, String userID) {
         double x = 0;
