@@ -9,6 +9,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.web_4th_lab.web_4th_lab.Beans.UserService;
+import org.web_4th_lab.web_4th_lab.Utils.PasswordHash;
 
 @Path("/authorization")
 public class AuthorizationController {

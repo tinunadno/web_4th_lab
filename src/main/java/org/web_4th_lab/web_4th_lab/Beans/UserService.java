@@ -3,6 +3,7 @@ package org.web_4th_lab.web_4th_lab.Beans;
 import jakarta.ejb.Stateless;
 import org.web_4th_lab.web_4th_lab.DAOServices.UserDAO;
 import org.web_4th_lab.web_4th_lab.Utils.BackendLogger;
+import org.web_4th_lab.web_4th_lab.Utils.PasswordHash;
 import org.web_4th_lab.web_4th_lab.Utils.TokenGenerator;
 import org.web_4th_lab.web_4th_lab.entities.User;
 
@@ -13,13 +14,15 @@ public class UserService {
 
     UserDAO userDAO = new UserDAO();
     private final TokenGenerator tokenGenerator = new TokenGenerator();
+    private final PasswordHash passwordHash = new PasswordHash();
 
     public String registerUser(String username, String password) {
         if(userDAO.userExists(username))
             return "user already exists";
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);
+        String hashedPassword = passwordHash.toSHA384(password);
+        user.setPassword(hashedPassword);
         String token = tokenGenerator.getNewToken();
         user.setToken(token);
         userDAO.saveUser(user);
@@ -30,7 +33,8 @@ public class UserService {
     public String authorizeUser(String username, String password){
         if(!userDAO.userExists(username))
             return "Invalid username";
-        if(!userDAO.userPasswordMatches(username, password))
+        String hashedPassword = passwordHash.toSHA384(password);
+        if(!userDAO.userPasswordMatches(username, hashedPassword))
             return "Invalid password";
         int id = userDAO.getUserID(username);
         String token = tokenGenerator.getNewToken();
