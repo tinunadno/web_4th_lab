@@ -39,7 +39,9 @@ public class Result {
 
     @Override
     public String toString() {
-        return this.xCord+"%"+this.yCord+"%"+this.radius+"%"+this.requestTime+"%"+this.executionTime+"%"+(this.result ? "true" : "false");
+        double temp_y = (double)((int)(yCord*100))/100.0;
+        double temp_x = (double)((int)(xCord*100))/100.0;
+        return temp_x+"%"+temp_y+"%"+this.radius+"%"+this.requestTime+"%"+this.executionTime+"%"+(this.result ? "true" : "false");
     }
 
 

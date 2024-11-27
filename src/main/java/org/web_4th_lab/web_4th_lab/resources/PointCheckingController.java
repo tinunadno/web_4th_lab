@@ -59,4 +59,17 @@ public class PointCheckingController {
         String result = pointService.getUserHistory(id);
         return Response.ok(result).build();
     }
+
+    @GET
+    @Path("deleteUser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteUser(@QueryParam("id") String id,
+                               @QueryParam("token") String token) {
+        if(!userService.validateAuthorizedUser(id, token)){
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+        pointService.clearPointHistory(id);
+        userService.deleteUserById(id);
+        return Response.ok("removed user").build();
+    }
 }

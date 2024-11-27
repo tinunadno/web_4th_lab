@@ -82,5 +82,29 @@ public class UserDAO {
         User user = getUserByName(username);
         return user.getPassword().equals(password);
     }
+    public void deleteUserById(int userId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                // Создаем запрос для удаления всех результатов с нужным user_id
+                Query query = session.createQuery("DELETE FROM User u WHERE u.id = :userId");
+                query.setParameter("userId", userId);
+
+                int deletedCount = query.executeUpdate(); // Выполняем запрос
+
+                transaction.commit(); // Подтверждаем изменения
+                System.out.println("Deleted " + deletedCount + " results for user ID: " + userId);
+            } catch (Exception e) {
+                if (transaction != null && transaction.getStatus().canRollback()) {
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

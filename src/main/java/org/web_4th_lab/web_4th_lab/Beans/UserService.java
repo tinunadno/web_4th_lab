@@ -48,4 +48,14 @@ public class UserService {
         return userDAO.validateAuthorizedUser(id_, token);
     }
 
+    public void deleteUserById(String id){
+        int id_=-1;
+        try{
+            id_ = Integer.parseInt(id);
+        }catch (NumberFormatException e){
+            e.printStackTrace();
+        }
+        userDAO.deleteUserById(id_);
+    }
+
 }
