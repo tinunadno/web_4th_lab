@@ -37,6 +37,16 @@ public class Result {
         this.user = user;
     }
 
+    public Result(double xCord, double yCord, double radius, boolean result, String requestTime, long executionTime, User user) {
+        this.xCord = xCord;
+        this.yCord = yCord;
+        this.radius = radius;
+        this.result = result;
+        this.requestTime = requestTime;
+        this.executionTime = executionTime;
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         double temp_y = (double)((int)(yCord*100))/100.0;

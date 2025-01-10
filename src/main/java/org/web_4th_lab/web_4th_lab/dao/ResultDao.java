@@ -1,9 +1,8 @@
-package org.web_4th_lab.web_4th_lab.DAOServices;
+package org.web_4th_lab.web_4th_lab.dao;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.web_4th_lab.web_4th_lab.Utils.BackendLogger;
 import org.web_4th_lab.web_4th_lab.entities.Result;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class ResultDao {
         }
     }
 
-    public List<Result> getResultsByUserId(int userId) {
+    public List<Result> getResultsByUserId(long userId) {
         List<Result> results = new ArrayList<>();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Result> query = session.createQuery("FROM Result r WHERE r.user.id = :userId", Result.class);
@@ -39,7 +38,7 @@ public class ResultDao {
         return results;
     }
 
-    public void deleteResultsByUserId(int userId) {
+    public void deleteResultsByUserId(long userId) throws RuntimeException{
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = null;
             try {
@@ -55,10 +54,10 @@ public class ResultDao {
                 if (transaction != null && transaction.getStatus().canRollback()) {
                     transaction.rollback();
                 }
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

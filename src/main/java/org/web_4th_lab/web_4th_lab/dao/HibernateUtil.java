@@ -1,4 +1,4 @@
-package org.web_4th_lab.web_4th_lab.DAOServices;
+package org.web_4th_lab.web_4th_lab.dao;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

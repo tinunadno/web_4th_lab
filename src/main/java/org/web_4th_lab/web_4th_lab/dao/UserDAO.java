@@ -1,9 +1,8 @@
-package org.web_4th_lab.web_4th_lab.DAOServices;
+package org.web_4th_lab.web_4th_lab.dao;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.web_4th_lab.web_4th_lab.Utils.BackendLogger;
 import org.web_4th_lab.web_4th_lab.entities.User;
 
 public class UserDAO {
@@ -19,14 +18,14 @@ public class UserDAO {
         }
     }
 
-    public User getUserById(int id){
+    public User getUserById(long id){
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             User user = session.get(User.class, id);
             return user;
         }
     }
 
-    public void saveToken(int userId, String token) {
+    public void saveToken(long userId, String token) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -45,7 +44,7 @@ public class UserDAO {
         }
     }
 
-    public boolean validateAuthorizedUser(int id, String token) {
+    public boolean validateAuthorizedUser(long id, String token) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             User user = session.get(User.class, id);
             System.out.println(user);
@@ -82,7 +81,7 @@ public class UserDAO {
         User user = getUserByName(username);
         return user.getPassword().equals(password);
     }
-    public void deleteUserById(int userId) {
+    public Transaction deleteUserById(long userId) throws RuntimeException{
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = null;
             try {
@@ -95,14 +94,15 @@ public class UserDAO {
 
                 transaction.commit();
                 System.out.println("Deleted " + deletedCount + " results for user ID: " + userId);
+                return transaction;
             } catch (Exception e) {
                 if (transaction != null && transaction.getStatus().canRollback()) {
                     transaction.rollback();
                 }
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("something went wrong on user deletion " + e.getMessage());
         }
     }
 
