@@ -6,17 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ResultListResponse {
-    private List<Result> results;
+    private List<ResultResponse> results;
 
-    public ResultListResponse(List<Result> results) {
+    public ResultListResponse(List<ResultResponse> results) {
         this.results = results;
     }
 
-    public List<Result> getResults() {
+    public List<ResultResponse> getResults() {
         return results;
     }
 
-    public void setResults(List<Result> results) {
+    public void setResults(List<ResultResponse> results) {
         this.results = results;
     }
 }

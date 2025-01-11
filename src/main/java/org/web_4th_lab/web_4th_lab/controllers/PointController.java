@@ -10,6 +10,7 @@ import org.web_4th_lab.web_4th_lab.Beans.UserService;
 import org.web_4th_lab.web_4th_lab.DTO.CheckPointRequest;
 import org.web_4th_lab.web_4th_lab.DTO.NoBodyRequest;
 import org.web_4th_lab.web_4th_lab.DTO.ResultListResponse;
+import org.web_4th_lab.web_4th_lab.DTO.ResultResponse;
 import org.web_4th_lab.web_4th_lab.Utils.BackendLogger;
 
 import javax.validation.constraints.NotNull;
@@ -31,9 +32,8 @@ public class PointController {
         }
         try {
             //TODO add normal point fetching on front end
-            pointService.checkPoint(checkPointRequest);
-            ResultListResponse result = pointService.getUserHistory(checkPointRequest.getId());
-            return Response.ok(result).build();
+            ResultResponse response = pointService.checkPoint(checkPointRequest);;
+            return Response.ok(response).build();
         }catch (RuntimeException e){
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
