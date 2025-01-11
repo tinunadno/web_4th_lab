@@ -39,19 +39,13 @@ public class PointController {
     @GET
     @Path("getPoints")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPoints(@QueryParam("userId") String id,
+    public Response getPoints(@QueryParam("userId") long id,
                               @QueryParam("token") String token) {
-        long id_;
-        try {
-            id_ = Long.parseLong(id);
-        }catch (NumberFormatException e){
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-        if(!userService.validateAuthorizedUser(id_, token)){
+        if(!userService.validateAuthorizedUser(id, token)){
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         try {
-            ResultListResponse result = pointService.getUserHistory(id_);
+            ResultListResponse result = pointService.getUserHistory(id);
             return Response.ok(result).build();
         }catch (RuntimeException e){
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
