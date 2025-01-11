@@ -90,12 +90,6 @@ public class UserDAO {
         }
     }
 
-    public long getUserID(String name){
-        User user = getUserByName(name);
-        if(user != null)return user.getId();
-        return -1;
-    }
-
     public boolean userExists(String username) throws RuntimeException{
         return getUserByName(username) != null;
     }
@@ -110,10 +104,6 @@ public class UserDAO {
         }
     }
 
-    public boolean userPasswordMatches(String username, String password) {
-        User user = getUserByName(username);
-        return user.getPassword().equals(password);
-    }
     public void deleteUserById(long userId) throws RuntimeException{
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = null;

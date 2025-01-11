@@ -12,6 +12,8 @@ import org.web_4th_lab.web_4th_lab.DTO.NoBodyRequest;
 import org.web_4th_lab.web_4th_lab.DTO.ResultListResponse;
 import org.web_4th_lab.web_4th_lab.Utils.BackendLogger;
 
+import javax.validation.constraints.NotNull;
+
 @Path("/pointController")
 public class PointController {
 
@@ -28,6 +30,7 @@ public class PointController {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         try {
+            //TODO add normal point fetching on front end
             pointService.checkPoint(checkPointRequest);
             ResultListResponse result = pointService.getUserHistory(checkPointRequest.getId());
             return Response.ok(result).build();
@@ -39,8 +42,8 @@ public class PointController {
     @GET
     @Path("getPoints")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPoints(@QueryParam("userId") long id,
-                              @QueryParam("token") String token) {
+    public Response getPoints(@QueryParam("userId") @NotNull(message = "user id is required") long id,
+                              @QueryParam("token") @NotNull(message = "token is required") String token) {
         if(!userService.validateAuthorizedUser(id, token)){
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }

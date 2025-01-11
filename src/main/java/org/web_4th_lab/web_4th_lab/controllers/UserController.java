@@ -11,7 +11,7 @@ import org.web_4th_lab.web_4th_lab.DTO.AuthenticationResponse;
 import org.web_4th_lab.web_4th_lab.DTO.NoBodyRequest;
 
 @Path("/userController")
-public class userController {
+public class UserController {
     @EJB
     UserService userService;
 

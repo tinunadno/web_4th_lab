@@ -2,7 +2,7 @@ package org.web_4th_lab.web_4th_lab.rest;
 
 import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.ApplicationPath;
-import org.web_4th_lab.web_4th_lab.controllers.userController;
+import org.web_4th_lab.web_4th_lab.controllers.UserController;
 import org.web_4th_lab.web_4th_lab.controllers.PointController;
 
 import java.util.HashSet;
@@ -13,7 +13,7 @@ public class RestApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> classes = new HashSet<>();
-        classes.add(userController.class);
+        classes.add(UserController.class);
         classes.add(PointController.class);
         return classes;
     }
