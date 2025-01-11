@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ResultDao {
 
-    public void saveResult(Result result) {
+    public void saveResult(Result result) throws RuntimeException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = null;
             try {
@@ -21,21 +21,21 @@ public class ResultDao {
                 if (transaction != null && transaction.getStatus().canRollback()) {
                     transaction.rollback();
                 }
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
     }
 
-    public List<Result> getResultsByUserId(long userId) {
-        List<Result> results = new ArrayList<>();
+    public List<Result> getResultsByUserId(long userId) throws RuntimeException{
+        List<Result> results;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Result> query = session.createQuery("FROM Result r WHERE r.user.id = :userId", Result.class);
             query.setParameter("userId", userId);
             results = query.getResultList();
+            return results;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return results;
     }
 
     public void deleteResultsByUserId(long userId) throws RuntimeException{

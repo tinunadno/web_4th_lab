@@ -6,7 +6,7 @@ import org.hibernate.query.Query;
 import org.web_4th_lab.web_4th_lab.entities.User;
 
 public class UserDAO {
-    public void saveUser(User user) {
+    public void saveUser(User user) throws RuntimeException{
         Transaction transaction = null;
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
@@ -14,18 +14,20 @@ public class UserDAO {
             transaction.commit();
         }catch (Exception e) {
             if(transaction != null) transaction.rollback();
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
     }
 
-    public User getUserById(long id){
+    public User getUserById(long id) throws RuntimeException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             User user = session.get(User.class, id);
             return user;
+        }catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void saveToken(long userId, String token) {
+    public void saveToken(long userId, String token) throws RuntimeException {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -34,17 +36,17 @@ public class UserDAO {
                 user.setToken(token);
                 session.update(user);
             } else {
-                System.out.println("failed find user");
+                throw new RuntimeException("user not found");
             }
 
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
-            System.out.println(e);
+            throw new RuntimeException(e);
         }
     }
 
-    public boolean validateAuthorizedUser(long id, String token) {
+    public boolean validateAuthorizedUser(long id, String token) throws RuntimeException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             User user = session.get(User.class, id);
             System.out.println(user);
@@ -54,8 +56,7 @@ public class UserDAO {
                 return false;
             }
         }catch (Exception e) {
-            System.out.println(e);
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -65,15 +66,17 @@ public class UserDAO {
         return -1;
     }
 
-    public boolean userExists(String username) {
+    public boolean userExists(String username) throws RuntimeException{
         return getUserByName(username) != null;
     }
 
-    private User getUserByName(String name) {
+    private User getUserByName(String name) throws RuntimeException {
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<User> query = session.createQuery("from User where username = :name", User.class);
             query.setParameter("name", name);
             return query.uniqueResult();
+        }catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

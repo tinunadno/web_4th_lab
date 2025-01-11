@@ -1,17 +1,18 @@
 package org.web_4th_lab.web_4th_lab.DTO;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class AuthenticationRequest {
-    @NotBlank(message =  "user name coordinate is required")
+    @NotNull(message =  "user name is required")
     private String username;
-    @NotBlank(message =  "password coordinate is required")
+    @NotNull(message =  "password is required")
     private String password;
 
     public AuthenticationRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }
+    public AuthenticationRequest() {}
 
     public String getPassword() {
         return password;

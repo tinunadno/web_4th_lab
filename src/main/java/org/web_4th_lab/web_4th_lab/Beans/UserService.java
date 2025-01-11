@@ -19,8 +19,8 @@ public class UserService {
     private final TokenGenerator tokenGenerator = new TokenGenerator();
     private final PasswordHash passwordHash = new PasswordHash();
 
-    public AuthenticationResponse registerUser(String username, String password) throws IllegalArgumentException{
-        if(userDAO.userExists(username)){
+    public AuthenticationResponse registerUser(String username, String password) throws RuntimeException {
+        if (userDAO.userExists(username)) {
             throw new IllegalArgumentException("Username already exists");
         }
         User user = new User();
@@ -34,7 +34,7 @@ public class UserService {
         return new AuthenticationResponse(id, tokenGenerator.getNewToken());
     }
 
-    public AuthenticationResponse authorizeUser(String username, String password) throws IllegalArgumentException{
+    public AuthenticationResponse authorizeUser(String username, String password) throws RuntimeException{
         if(!userDAO.userExists(username)){
             throw new IllegalArgumentException("user does not exist");
         }
@@ -48,21 +48,17 @@ public class UserService {
         return new AuthenticationResponse(id, token);
     }
 
-    public boolean validateAuthorizedUser(long id, String token) throws IllegalArgumentException{
+    public boolean validateAuthorizedUser(long id, String token){
         return userDAO.validateAuthorizedUser(id, token);
     }
 
     public void deleteUserById(long id) throws RuntimeException{
         //this is kind'a bad, but it's the best way, when I wouldn't overlap dao's
-        try {
-            Transaction userDeletionTransaction = userDAO.deleteUserById(id);
-            try{
-                resultDao.deleteResultsByUserId(id);
-            } catch (RuntimeException e) {
-                userDeletionTransaction.rollback();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        Transaction userDeletionTransaction = userDAO.deleteUserById(id);
+        try{
+            resultDao.deleteResultsByUserId(id);
+        } catch (RuntimeException e) {
+            userDeletionTransaction.rollback();
         }
     }
 

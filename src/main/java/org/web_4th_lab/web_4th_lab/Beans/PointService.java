@@ -8,7 +8,6 @@ import org.web_4th_lab.web_4th_lab.dao.UserDAO;
 import org.web_4th_lab.web_4th_lab.Utils.DateFormer;
 import org.web_4th_lab.web_4th_lab.entities.Result;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -17,11 +16,11 @@ public class PointService {
     ResultDao resultDao = new ResultDao();
     private final DateFormer dateFormer= new DateFormer();
 
-    public void clearPointHistory(long userID) throws IllegalArgumentException{
+    public void clearPointHistory(long userID) throws RuntimeException{
         resultDao.deleteResultsByUserId(userID);
     }
 
-    public void checkPoint(CheckPointRequest checkPointRequest) throws IllegalArgumentException{
+    public void checkPoint(CheckPointRequest checkPointRequest) throws RuntimeException{
         long start_time = System.nanoTime();
         boolean result = pointBelongs(checkPointRequest.getX_cord(), checkPointRequest.getY_cord(), checkPointRequest.getRadius());
         long execution_time = System.nanoTime() - start_time;
@@ -30,7 +29,7 @@ public class PointService {
         resultDao.saveResult(res);
     }
 
-    public ResultListResponse getUserHistory(long userID) throws IllegalArgumentException{
+    public ResultListResponse getUserHistory(long userID) throws RuntimeException{
         List<Result> resultHistory = resultDao.getResultsByUserId(userID);
         return new ResultListResponse(resultHistory);
     }

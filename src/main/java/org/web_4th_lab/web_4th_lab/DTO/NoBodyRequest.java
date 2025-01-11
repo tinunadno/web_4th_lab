@@ -1,11 +1,13 @@
 package org.web_4th_lab.web_4th_lab.DTO;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import javax.validation.constraints.Pattern;
 
 public class NoBodyRequest {
-    @NotBlank
+    @NotNull(message = "user id is required")
     private long userId;
+    @NotNull(message = "token is required")
     @Pattern(
             regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
             message = "token is invalid"

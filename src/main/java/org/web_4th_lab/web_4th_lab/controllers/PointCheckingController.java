@@ -45,7 +45,7 @@ public class PointCheckingController {
         try {
             ResultListResponse result = pointService.getUserHistory(noBodyRequest.getUserId());
             return Response.ok(result).build();
-        }catch (IllegalArgumentException e){
+        }catch (RuntimeException e){
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
@@ -59,25 +59,10 @@ public class PointCheckingController {
         }
         try {
             pointService.clearPointHistory(noBodyRequest.getUserId());
-        }catch (IllegalArgumentException e){
+        }catch (RuntimeException e){
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
 
-        return Response.ok().build();
-    }
-
-    @GET
-    @Path("deleteUser")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteUser(@Valid NoBodyRequest noBodyRequest) {
-        if(!userService.validateAuthorizedUser(noBodyRequest.getUserId(), noBodyRequest.getToken())){
-            return Response.status(Response.Status.UNAUTHORIZED).build();
-        }
-        try {
-            userService.deleteUserById(noBodyRequest.getUserId());
-        } catch (IllegalArgumentException e){
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
         return Response.ok().build();
     }
 }

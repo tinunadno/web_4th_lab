@@ -1,19 +1,20 @@
 package org.web_4th_lab.web_4th_lab.DTO;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import javax.validation.constraints.Pattern;
 
 public class CheckPointRequest {
 
-    @NotBlank(message =  "x coordinate is required")
+    @NotNull(message =  "x coordinate is required")
     double x_cord;
-    @NotBlank(message =  "y coordinate is required")
+    @NotNull(message =  "y coordinate is required")
     double y_cord;
-    @NotBlank(message =  "radius coordinate is required")
+    @NotNull(message =  "radius is required")
     double radius;
-    @NotBlank(message =  "user id coordinate is required")
+    @NotNull(message =  "user id is required")
     long id;
+    @NotNull(message = "token is required")
     @Pattern(
             regexp = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
             message = "token is invalid"
