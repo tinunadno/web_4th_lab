@@ -11,7 +11,7 @@ import org.web_4th_lab.web_4th_lab.DTO.AuthenticationResponse;
 import org.web_4th_lab.web_4th_lab.DTO.NoBodyRequest;
 
 @Path("/userController")
-public class AuthorizationController {
+public class userController {
     @EJB
     UserService userService;
 
@@ -20,7 +20,7 @@ public class AuthorizationController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response authorize(@Valid AuthenticationRequest authenticationRequest) {
         try {
-            AuthenticationResponse result = userService.authorizeUser(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+            AuthenticationResponse result = userService.authorizeUser(authenticationRequest);
             return Response.ok(result).build();
         }catch (RuntimeException e){
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
@@ -32,7 +32,7 @@ public class AuthorizationController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(@Valid AuthenticationRequest authenticationRequest) {
         try {
-            AuthenticationResponse result = userService.registerUser(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+            AuthenticationResponse result = userService.registerUser(authenticationRequest);
             return Response.ok(result).build();
         }catch (RuntimeException e){
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();

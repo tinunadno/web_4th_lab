@@ -10,9 +10,10 @@ import org.web_4th_lab.web_4th_lab.Beans.UserService;
 import org.web_4th_lab.web_4th_lab.DTO.CheckPointRequest;
 import org.web_4th_lab.web_4th_lab.DTO.NoBodyRequest;
 import org.web_4th_lab.web_4th_lab.DTO.ResultListResponse;
+import org.web_4th_lab.web_4th_lab.Utils.BackendLogger;
 
-@Path("/pointChecker")
-public class PointCheckingController {
+@Path("/pointController")
+public class PointController {
 
     @EJB
     UserService userService;
@@ -28,22 +29,29 @@ public class PointCheckingController {
         }
         try {
             pointService.checkPoint(checkPointRequest);
-        }catch (IllegalArgumentException e){
+            ResultListResponse result = pointService.getUserHistory(checkPointRequest.getId());
+            return Response.ok(result).build();
+        }catch (RuntimeException e){
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
-        ResultListResponse result = pointService.getUserHistory(checkPointRequest.getId());
-        return Response.ok(result).build();
     }
 
     @GET
     @Path("getPoints")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPoints(@Valid NoBodyRequest noBodyRequest) {
-        if(!userService.validateAuthorizedUser(noBodyRequest.getUserId(), noBodyRequest.getToken())){
+    public Response getPoints(@QueryParam("userId") String id,
+                              @QueryParam("token") String token) {
+        long id_;
+        try {
+            id_ = Long.parseLong(id);
+        }catch (NumberFormatException e){
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        if(!userService.validateAuthorizedUser(id_, token)){
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
         try {
-            ResultListResponse result = pointService.getUserHistory(noBodyRequest.getUserId());
+            ResultListResponse result = pointService.getUserHistory(id_);
             return Response.ok(result).build();
         }catch (RuntimeException e){
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();

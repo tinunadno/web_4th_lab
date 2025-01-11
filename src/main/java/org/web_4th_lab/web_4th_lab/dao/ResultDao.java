@@ -26,7 +26,7 @@ public class ResultDao {
         }
     }
 
-    public List<Result> getResultsByUserId(long userId) throws RuntimeException{
+    public List<Result> getResultsByUserId(long userId) throws RuntimeException {
         List<Result> results;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Result> query = session.createQuery("FROM Result r WHERE r.user.id = :userId", Result.class);
@@ -38,7 +38,7 @@ public class ResultDao {
         }
     }
 
-    public void deleteResultsByUserId(long userId) throws RuntimeException{
+    public Transaction deleteResultsByUserId(long userId) throws RuntimeException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = null;
             try {
@@ -46,10 +46,10 @@ public class ResultDao {
                 Query query = session.createQuery("DELETE FROM Result r WHERE r.user.id = :userId");
                 query.setParameter("userId", userId);
 
-                int deletedCount = query.executeUpdate();
+                query.executeUpdate();
 
                 transaction.commit();
-                System.out.println("Deleted " + deletedCount + " results for user ID: " + userId);
+                return transaction;
             } catch (Exception e) {
                 if (transaction != null && transaction.getStatus().canRollback()) {
                     transaction.rollback();

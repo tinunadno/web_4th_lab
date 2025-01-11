@@ -29,6 +29,7 @@ public class CheckPointRequest {
         this.token = token;
     }
 
+    public CheckPointRequest() {}
 
     public double getX_cord() {
         return x_cord;

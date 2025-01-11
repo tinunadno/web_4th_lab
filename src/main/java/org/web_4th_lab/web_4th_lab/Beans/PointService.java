@@ -24,8 +24,14 @@ public class PointService {
         long start_time = System.nanoTime();
         boolean result = pointBelongs(checkPointRequest.getX_cord(), checkPointRequest.getY_cord(), checkPointRequest.getRadius());
         long execution_time = System.nanoTime() - start_time;
-        Result res = new Result(checkPointRequest.getX_cord(), checkPointRequest.getY_cord(), checkPointRequest.getRadius(),
-                result, dateFormer.getCurrentDate(), execution_time, userDAO.getUserById(checkPointRequest.getId()));
+        Result res = new Result(
+                checkPointRequest.getX_cord(),
+                checkPointRequest.getY_cord(),
+                checkPointRequest.getRadius(),
+                result,
+                dateFormer.getCurrentDate(),
+                execution_time,
+                userDAO.getUserById(checkPointRequest.getId()));
         resultDao.saveResult(res);
     }
 

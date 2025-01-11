@@ -18,6 +18,7 @@ public class NoBodyRequest {
         this.userId = userId;
         this.token = token;
     }
+    public NoBodyRequest() {}
 
     public long getUserId() {
         return userId;

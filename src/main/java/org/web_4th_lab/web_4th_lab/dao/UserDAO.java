@@ -6,15 +6,44 @@ import org.hibernate.query.Query;
 import org.web_4th_lab.web_4th_lab.entities.User;
 
 public class UserDAO {
-    public void saveUser(User user) throws RuntimeException{
+    public long saveUser(User user) throws RuntimeException {
         Transaction transaction = null;
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.save(user);
+            Long userId = (Long) session.save(user);
             transaction.commit();
-        }catch (Exception e) {
-            if(transaction != null) transaction.rollback();
+            return userId;
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
             throw new RuntimeException(e);
+        }
+    }
+
+    public long getUserIdByUsernameAndPassword(String username, String password) throws RuntimeException {
+        Transaction transaction = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            User user = session.createQuery("FROM User WHERE username = :username", User.class)
+                    .setParameter("username", username)
+                    .uniqueResult();
+
+            if (user == null) {
+                throw new RuntimeException("User not found");
+            }
+
+            if (!user.getPassword().equals(password)) {
+                throw new RuntimeException("Invalid password");
+            }
+
+            Long userId = user.getId();
+            transaction.commit();
+            return userId;
+        } catch (Exception e) {
+            if (transaction != null) transaction.rollback();
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -35,6 +64,7 @@ public class UserDAO {
             if (user != null) {
                 user.setToken(token);
                 session.update(user);
+                session.flush();
             } else {
                 throw new RuntimeException("user not found");
             }
@@ -60,7 +90,7 @@ public class UserDAO {
         }
     }
 
-    public int getUserID(String name){
+    public long getUserID(String name){
         User user = getUserByName(name);
         if(user != null)return user.getId();
         return -1;
@@ -84,7 +114,7 @@ public class UserDAO {
         User user = getUserByName(username);
         return user.getPassword().equals(password);
     }
-    public Transaction deleteUserById(long userId) throws RuntimeException{
+    public void deleteUserById(long userId) throws RuntimeException{
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = null;
             try {
@@ -97,7 +127,6 @@ public class UserDAO {
 
                 transaction.commit();
                 System.out.println("Deleted " + deletedCount + " results for user ID: " + userId);
-                return transaction;
             } catch (Exception e) {
                 if (transaction != null && transaction.getStatus().canRollback()) {
                     transaction.rollback();
